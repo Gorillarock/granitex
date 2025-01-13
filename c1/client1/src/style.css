@@ -1,0 +1,11 @@
+body {
+  background: #2367b6;
+  padding: 0 24px;
+  margin: 0;
+  height: 100vh;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: pre-line;
+}
