@@ -78,11 +78,8 @@ let _db_document = {
   // onclick event for submission from client 1
   function post_tx() {
     const cMsg = document.getElementById("client.1.box.cMsg").value.toString();
-    // clear the input
-    document.getElementById("client.1.box.cMsg").value = "";
     const pin = document.getElementById("client.1.box.pin").value.toString();
-    // clear the input
-    document.getElementById("client.1.box.pin").value = "";
+
     const eMsg = encrypt(cMsg, pin);
     const question = gen_question();  // Not stored in DB
     const answer = sha512(question, pin);  // Stored in DB
@@ -100,6 +97,19 @@ let _db_document = {
     // TODO: remove. here is where we are building the simulated payload from the query GET resp
     serv_query_get_emulation(resp.id, resp.question, resp.verify);
 
+    // Call func to actually post the data to the server
+    post_to_tx_handler(question, answer, eMsg);
+
+    // clear the input
+    let form = document.getElementById("client.1.form");
+    form.reset();
+
+    let host = window.location.hostname;
+    let port = window.location.port;
+    let path = "/v1/rx";
+    let url = `http://${host}:${port}${path}?i=${resp.id}&q=${resp.question}&v=${resp.verify}`;
+
+    window.location.href = url;
     // Test for updating the URL query params dynamically
     // let params = new URLSearchParams(window.location.search);
     // params.set('i', resp.id);
@@ -153,6 +163,7 @@ let _db_document = {
     console.log("post_rx answer: " + answer);
     console.log("post_rx pin: " + pin);
 
+    get_from_rx_handler(answer);
     const eMsg = serv_rx_get_emulation(id, verify, answer);
     if (eMsg === "") {
       console.log("Error: eMsg not found");
@@ -162,10 +173,52 @@ let _db_document = {
     const cMsg = decrypt(eMsg, pin);
     console.log("rx cMsg: " + cMsg);
     update_client_2_output(cMsg);
+
   }
 
   function on_load() {
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get("i");
     console.log("on_load id: " + id);
+  }
+
+  function post_to_tx_handler(question, answer, eMsg) {
+    console.log("post_to_tx_handler");
+    let host = window.location.hostname;
+    console.log("host: " + host);
+    let port = window.location.port;
+    console.log("port: " + port);
+
+    fetch(`http://${host}:${port}/v1/handler/tx`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        question: question,
+        answer: answer,
+        emsg: eMsg,
+      }),
+    })
+    .then((response) => response.json())
+    .then((json) => console.log(json));
+  }
+
+  function get_from_rx_handler(answer) {
+    console.log("get_from_rx_handler");
+    let host = window.location.hostname;
+    console.log("host: " + host);
+    let port = window.location.port;
+    console.log("port: " + port);
+    let path = "/v1/handler/rx";
+
+    let current_params = new URLSearchParams(window.location.search);
+    let id = current_params.get("i");
+    let verify = current_params.get("v");
+
+    let url = `http://${host}:${port}${path}?i=${id}&v=${verify}&a=${answer}`;
+    console.log("get_from_rx_handler url: " + url);
+    fetch(url)
+    .then((response) => response.json())
+    .then((json) => console.log(json));
   }
