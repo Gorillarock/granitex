@@ -64,8 +64,8 @@ let _db_document = {
   }
 
   // Update UI with the URL response
-  function update_client_1_output(id, question, verify) {
-    document.getElementById("client.1.output").textContent = `URL: path/v1/query?i=${id}&q=${question}&v=${verify}`;
+  function log_url(id, question, verify) {
+    console.log(`URL: path/v1/query?i=${id}&q=${question}&v=${verify}`);
   }
 
   // simulate the server response to query GET
@@ -78,7 +78,11 @@ let _db_document = {
   // onclick event for submission from client 1
   function post_tx() {
     const cMsg = document.getElementById("client.1.box.cMsg").value.toString();
+    // clear the input
+    document.getElementById("client.1.box.cMsg").value = "";
     const pin = document.getElementById("client.1.box.pin").value.toString();
+    // clear the input
+    document.getElementById("client.1.box.pin").value = "";
     const eMsg = encrypt(cMsg, pin);
     const question = gen_question();  // Not stored in DB
     const answer = sha512(question, pin);  // Stored in DB
@@ -91,7 +95,7 @@ let _db_document = {
     console.log("submitted answer: " + answer);
 
     const resp = new serv_tx_post_emulation(question, answer, eMsg);
-    update_client_1_output(resp.id, resp.question, resp.verify);
+    log_url(resp.id, resp.question, resp.verify);
 
     // TODO: remove. here is where we are building the simulated payload from the query GET resp
     serv_query_get_emulation(resp.id, resp.question, resp.verify);
