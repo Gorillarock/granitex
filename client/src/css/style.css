@@ -9,3 +9,9 @@ body {
   align-items: center;
   white-space: pre-line;
 }
+button {
+  margin-top: 10px;
+}
+input {
+  width: 100%;
+}

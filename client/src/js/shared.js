@@ -98,18 +98,13 @@ let _db_document = {
     serv_query_get_emulation(resp.id, resp.question, resp.verify);
 
     // Call func to actually post the data to the server
-    post_to_tx_handler(question, answer, eMsg);
+    let response_url = post_to_tx_handler(question, answer, eMsg);
 
     // clear the input
     let form = document.getElementById("client.1.form");
     form.reset();
 
-    let host = window.location.hostname;
-    let port = window.location.port;
-    let path = "/v1/rx";
-    let url = `http://${host}:${port}${path}?i=${resp.id}&q=${resp.question}&v=${resp.verify}`;
-
-    window.location.href = url;
+    window.location.href = response_url;
     // Test for updating the URL query params dynamically
     // let params = new URLSearchParams(window.location.search);
     // params.set('i', resp.id);
@@ -189,7 +184,10 @@ let _db_document = {
     let port = window.location.port;
     console.log("port: " + port);
 
-    fetch(`http://${host}:${port}/v1/handler/tx`, {
+    let endpoint = `http://${host}:${port}`
+    let fetchUrl = `${endpoint}/v1/handler/tx`
+
+    let resp = fetch(fetchUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -199,9 +197,21 @@ let _db_document = {
         answer: answer,
         emsg: eMsg,
       }),
-    })
-    .then((response) => response.json())
-    .then((json) => console.log(json));
+    });
+
+    if (resp.ok) {
+      console.log("post_to_tx_handler: success");
+    } else {
+      return ""
+    }
+    respJson = resp.json();
+    console.log("post_to_tx_handler response json: " + respJson);
+
+    // parse response for url path
+    let path = respJson.path;
+    let responseUrl = `${endpoint}${path}`;
+    console.log("post_to_tx_handler response url: " + responseUrl);
+    return responseUrl;
   }
 
   function get_from_rx_handler(answer) {

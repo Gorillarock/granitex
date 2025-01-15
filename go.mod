@@ -6,6 +6,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/labstack/gommon v0.4.2
+	golang.org/x/exp v0.0.0-20250106191152-7588d65b2ba8
 )
 
 require (
