@@ -13,7 +13,7 @@ type DocumentEntry struct {
 }
 
 func (d DocumentEntry) EmsgResponse() string {
-	return fmt.Sprintf("{\"eMsg\": \"%s\"", d.Emsg)
+	return fmt.Sprintf("{\"emsg\": \"%s\"}", d.Emsg)
 }
 
 /*
