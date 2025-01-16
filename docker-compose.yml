@@ -11,9 +11,10 @@ services:
       - mongodb-log:/var/log/mongodb/
     env_file:
       - .env
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME: ${DB_USERNAME}
+    #   MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
+    command: ["--auth"]
     ports:
       - "27017:27017"
     networks:
@@ -26,12 +27,14 @@ services:
       target: runner
     container_name: granitex
     restart: always
-    environment:
-      DB_USER: ${MONGO_INITDB_ROOT_USERNAME}
-      DB_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      DB_PORT: 27017
+    env_file:
+      - .env
+    # environment:
+    #   DB_USERNAME: ${DB_USERNAME}
+    #   DB_PASSWORD: ${DB_PASSWORD}
+    #   DB_PORT: 27017
     ports:
-      - 8080:1323
+      - 1323:1323
     networks:
       - mongodb_network
     depends_on:

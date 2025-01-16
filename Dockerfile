@@ -12,4 +12,5 @@ FROM golang:1.23-bookworm AS runner
 WORKDIR /app
 COPY --from=builder /app/granitex .
 COPY ./client /app/client
+COPY .env /app/.env
 CMD ["./granitex"]
