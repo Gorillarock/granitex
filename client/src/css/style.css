@@ -15,3 +15,21 @@ button {
 input {
   width: 100%;
 }
+h4 {
+  margin-bottom: 20px;
+}
+p {
+  width: 100%;
+  font-size: 1.5em;
+}
+div {
+  width: 80%;
+}
+.container {
+  width: 80%;
+  margin: 0 auto;
+}
+.scroller {
+  height: 200px;
+  overflow-y: scroll;
+}

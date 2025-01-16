@@ -11,8 +11,14 @@ function decrypt(eVal, key) {
     return dMsg.toString(CryptoJS.enc.Utf8);
 }
 
-function update_client_2_output(cMsg) {
-    document.getElementById("client.2.output").textContent = cMsg;
+function update_client_2_output(words) {
+    document.getElementById("client.2.output").textContent = words;
+}
+
+function update_client_2_output_msg(cMsg) {
+    let e = document.getElementById("client.2.output.msg");
+    e.textContent = cMsg;
+    e.style.display = "block";
 }
 
 async function post_rx() {
@@ -20,10 +26,18 @@ async function post_rx() {
     const pin = document.getElementById("client.2.box.pin").value.toString();
 
     let eMsg = await get_from_rx_handler(pin);
-
+    if (eMsg === false) {
+        console.log("Error: eMsg not obtained");
+        return false
+    }
     // decrypt eMsg
     const cMsg = decrypt(eMsg, pin);
-    update_client_2_output(cMsg);
+    if (cMsg === "") {
+        console.log("Error: failed to decrypt message");
+        return false;
+    }
+    update_client_2_output("Succes:");
+    update_client_2_output_msg(cMsg);
 
 }
 
@@ -41,14 +55,30 @@ async function get_from_rx_handler(pin) {
 
     let url = `http://${host}:${port}${path}?i=${id}&v=${verify}&a=${answer}`;
     console.log("get_from_rx_handler url: " + url);
-    const response = await fetch(url);
 
-    const respJson = await response.json();
+    let response = null;
+    try {
+      response = await fetch(url).then(resp => {
+        if (!resp.ok) {
+          let err = new Error("HTTP status code: " + resp.status + " msg: " + resp.statusText);
+          err.response = resp;
+          err.status = resp.status;
+          throw err;
+        }
+        return resp;
+      });
+    } catch (err) {
+      console.log("get_from_rx_handler: fetch error: " + err);
+      update_client_2_output("Error: " + err);
+      return false;
+    }
+    
+    let respJson = await response.json();
     if (response.ok) {
       console.log("get_from_rx_handler: success");
     } else {
       console.log("get_from_rx_handler: failure");
-      return "";
+      return false;
     }
     console.log("get_from_rx_handler response json: " + respJson);
 
@@ -56,7 +86,7 @@ async function get_from_rx_handler(pin) {
     let eMsg = respJson.emsg;
     if (eMsg === "") {
       console.log("Error: eMsg not found");
-      return "";
+      return false;
     }
 
     return eMsg;

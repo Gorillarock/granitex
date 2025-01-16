@@ -7,8 +7,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
     <script type="text/javascript" src="src/js/rx_client.js"></script>
   </head>
-  <body onload="on_load()">
-      <div>
+  <body>
+      <div class="container">
         <form>
           <h2>Decrypt</h2>
           <input
@@ -16,10 +16,14 @@
           id="client.2.box.pin"
           placeholder="PIN"/>
           <button id="client.2.button.get" onclick="post_rx()">Get</button>
+          <div>
+            <h4 id="client.2.output"></h4>
+            <p class="scroller" id="client.2.output.msg"></p>
+        </div>
         </form>
-        <div>
-          <p id="client.2.output"></p>
-      </div>
     </div>
+    <script>
+      document.getElementById("client.2.output.msg").style.display = "none";
+    </script>
   </body>
 </html>
