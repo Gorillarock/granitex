@@ -8,6 +8,10 @@
     <script type="text/javascript" src="src/js/rx_client.js"></script>
   </head>
   <body>
+    <picture onclick="goto_home()" class="topleft">
+      <source srcset="src/assets/logo_10p.png" media="(min-width: 800px)">
+      <img src="src/assets/logo_5p.png" alt="Image of a rock that is also a lock" style="width:auto;">
+    </picture>
       <div class="container">
         <form>
           <h2>Decrypt</h2>
@@ -21,7 +25,7 @@
             <p class="scroller" id="client.2.output.msg"></p>
         </div>
         </form>
-    </div>
+      </div>
     <script>
       document.getElementById("client.2.output.msg").style.display = "none";
     </script>

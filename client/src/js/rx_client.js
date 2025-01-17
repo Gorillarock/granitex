@@ -15,6 +15,15 @@ function update_client_2_output(words) {
     document.getElementById("client.2.output").textContent = words;
 }
 
+function goto_home() {
+  let host = window.location.hostname;
+  let port = window.location.port;
+
+  let endpoint = `http://${host}:${port}`
+  let txUrl = `${endpoint}/v1/tx`
+  window.location.href = txUrl;
+}
+
 function update_client_2_output_msg(cMsg) {
     let e = document.getElementById("client.2.output.msg");
     e.textContent = cMsg;

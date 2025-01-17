@@ -5,11 +5,11 @@ import (
 )
 
 type DocumentEntry struct {
-	ID     string `json:"id"`
-	Verify string `json:"verify"`
-	Answer string `json:"answer"`
-	Emsg   string `json:"emsg"`
-	Try    int    `json:"try"`
+	ID     string `json:"_id,omitempty" bson:"_id,omitempty"`
+	Verify string `json:"verify,omitempty" bson:"verify,omitempty"`
+	Answer string `json:"answer,omitempty" bson:"answer,omitempty"`
+	Emsg   string `json:"emsg,omitempty" bson:"emsg,omitempty"`
+	Try    int    `json:"try" bson:"try"`
 }
 
 func (d DocumentEntry) EmsgResponse() string {

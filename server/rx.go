@@ -3,46 +3,48 @@
 package server
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
 	"granitex/db"
 	"granitex/model"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
+)
+
+var (
+	ERROR_UNAUTHORIZED = errors.New("Unauthorized")
 )
 
 func GetRxHandler(c echo.Context) error {
+	resp := model.ResponsePayloadRxHandler{}
 	// get query parameters
 	var input model.GetRxParams
 	if err := c.Bind(&input); err != nil {
-		return c.String(http.StatusBadRequest, "Bad Request")
+		resp.Error = fmt.Errorf("Bad Request: %v", err)
+		resp.Status = http.StatusBadRequest
+		return c.String(resp.Status, getJson(resp))
 	}
 
-	fmt.Printf("Params: %+v\n", input)
+	resp = db.DBHandler.GetRx(c.Request().Context(), input)
+	if resp.Error != nil {
+		log.Error(resp.Error)
+	}
 
-	// read contents of file mock_db.json TODO: use MongoDB
-	doc, err := db.MockReadFromDB()
+	if resp.Deleted && resp.Status == http.StatusUnauthorized {
+		resp.Error = fmt.Errorf("Unauthorized Access Attempts Exceeded: Message Destroyed")
+	}
+
+	return c.String(resp.Status, getJson(resp))
+}
+
+func getJson(resp model.ResponsePayloadRxHandler) string {
+	respJson, err := json.Marshal(resp)
 	if err != nil {
-		return c.String(http.StatusInternalServerError, err.Error())
+		log.Error(err)
+		return "{\"Error\": \"Internal Server Error\"}"
 	}
-
-	// check if ID exists
-	foundMatch := doc.VerifyInput(input)
-	if !foundMatch {
-		return c.String(http.StatusNotFound, "Not Found")
-	}
-
-	// check if answer is correct
-	match, mustDelete := doc.CheckAnswer(input.Answer)
-
-	// delete if must
-	// todo: implement
-	_ = mustDelete
-
-	if !match {
-		return c.String(http.StatusUnauthorized, "Unauthorized.")
-	}
-
-	// Return eMsg
-	return c.String(http.StatusOK, doc.EmsgResponse())
+	return string(respJson)
 }

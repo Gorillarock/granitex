@@ -8,22 +8,26 @@
     <script type="text/javascript" src="src/js/tx_client.js"></script>
   </head>
   <body>
-    <div class="container">
-      <form id="client.1.form">
-        <h1 id="box.Com">Enter Message and Pin</h1>
-        <input
-        type="text"
-        id="client.1.box.cMsg"
-        placeholder="Message"
-        required
-        /><br />
-        <input
-        type="text"
-        id="client.1.box.pin"
-        placeholder="PIN"
-        required/>
-        <button id="button.Submit" onclick="post_tx()">Submit</button>
-      </form>
-    </div>
+    <picture onclick="refresh()" class="topleft">
+      <source srcset="src/assets/logo_10p.png" media="(min-width: 800px)">
+      <img src="src/assets/logo_5p.png" alt="Image of a rock that is also a lock" style="width:auto;">
+    </picture>
+      <div class="container">
+        <form id="client.1.form">
+          <h1 id="box.Com">Enter Message and Pin</h1>
+          <input
+          type="text"
+          id="client.1.box.cMsg"
+          placeholder="Message"
+          required
+          /><br />
+          <input
+          type="text"
+          id="client.1.box.pin"
+          placeholder="PIN"
+          required/>
+          <button id="button.Submit" onclick="post_tx()">Submit</button>
+        </form>
+      </div>
   </body>
 </html>

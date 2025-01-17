@@ -31,7 +31,7 @@ func PostTxHandler(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	id, err := db.MockSaveToDB(doc)
+	id, err := db.DBHandler.InsertTx(c.Request().Context(), doc)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}

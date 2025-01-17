@@ -27,9 +27,16 @@ div {
 }
 .container {
   width: 80%;
+  left: 100px;
   margin: 0 auto;
 }
 .scroller {
   height: 200px;
   overflow-y: scroll;
+}
+.topleft {
+  position: fixed;
+  top: 2%;
+  left: 10px;
+  margin: auto;
 }

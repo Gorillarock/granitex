@@ -18,6 +18,10 @@ function encrypt(cMsg, pin) {
     return eMsg.toString();
 }
 
+function refresh() {
+  window.location.reload();
+}
+
 // onclick event for submission from client 1
 async function post_tx() {
     event.preventDefault();
@@ -38,9 +42,7 @@ async function post_tx() {
 async function post_to_tx_handler(question, answer, eMsg) {
     console.log("post_to_tx_handler");
     let host = window.location.hostname;
-    console.log("host: " + host);
     let port = window.location.port;
-    console.log("port: " + port);
 
     let endpoint = `http://${host}:${port}`
     let fetchUrl = `${endpoint}/v1/handler/tx`

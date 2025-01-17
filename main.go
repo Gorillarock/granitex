@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"granitex/db"
 	"granitex/server"
@@ -25,7 +24,7 @@ func main() {
 	e.POST("/v1/handler/tx", server.PostTxHandler)
 	e.GET("/v1/handler/rx", server.GetRxHandler)
 
-	err := db.DBHandler.Connect(context.Background())
+	err := db.NewDBClient()
 	if err != nil {
 		e.Logger.Fatal(err)
 	}
