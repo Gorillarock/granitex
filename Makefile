@@ -1,21 +1,19 @@
-.PHONY: full-build
+.PHONY: build
 
-rebuild: mod clean force-build
+run: build
+	docker compose up
 
-force-build:
-	docker compose build --no-cache
-
-mod:
-	go mod download
-
-clean:
-	go mod tidy
-
-build: mod clean 
-	docker compose build
+run-headless: build
+	docker compose up -d
 
 run-with-rebuild: rebuild
 	docker compose up
 
-run: build
-	docker compose up
+run-headless-with-rebuild: rebuild
+	docker compose up -d
+
+build:
+	docker compose build
+
+rebuild:
+	docker compose build --no-cache
