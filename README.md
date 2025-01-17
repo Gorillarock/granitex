@@ -99,4 +99,4 @@ _Advisements before deploying for production usage._
     - Log in to manage stored messages.
     - Enables billing based on usage.
 - Time to live for all entries (unless logged into proper tier).
-- Tooltips to for fields which explain their usage.
+- Tooltips for fields which explain their usage.
