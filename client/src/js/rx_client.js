@@ -32,6 +32,12 @@ function update_client_2_output_msg(cMsg) {
 
 async function post_rx() {
     event.preventDefault();
+
+    document.getElementById("client.2.output").textContent = "";
+    document.getElementById("client.2.output.msg").textContent = "";
+    document.getElementById("client.2.output.msg").style.display = "none";
+
+
     const pin = document.getElementById("client.2.box.pin").value.toString();
 
     let eMsg = await get_from_rx_handler(pin);

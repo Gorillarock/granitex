@@ -47,7 +47,10 @@ async function post_to_tx_handler(question, answer, eMsg) {
     let endpoint = `http://${host}:${port}`
     let fetchUrl = `${endpoint}/v1/handler/tx`
 
-    const response = await fetch(fetchUrl, {
+    let response = null;
+
+    try {
+        response = await fetch(fetchUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,11 +60,24 @@ async function post_to_tx_handler(question, answer, eMsg) {
           answer: answer,
           emsg: eMsg,
         }),
+      }).then(resp => {
+        if (!resp.ok) {
+          let err = new Error("HTTP status code: " + resp.status + " msg: " + resp.statusText);
+          err.response = resp;
+          err.status = resp.status;
+          throw err;
+        }
+        return resp;
       });
+    } catch (err) {
+      console.log("post_to_tx_handler: fetch error: " + err);
+      update_client_1_output("Error: " + err);
+      return false;
+    }
 
-      const respJson = await response.json();
-      let path = respJson.path;
-      let response_url = `${endpoint}${path}`;
-      console.log("response_url: " + response_url);
-      return response_url;
+    const respJson = await response.json();
+    let path = respJson.path;
+    let response_url = `${endpoint}${path}`;
+    console.log("response_url: " + response_url);
+    return response_url;
 }

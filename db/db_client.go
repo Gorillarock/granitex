@@ -21,6 +21,8 @@ var DBHandler DBClient
 const (
 	DATABASE            = "granitex"
 	COLLECTION_MESSAGES = "messages"
+	defaultHost         = "localhost"
+	defaultPort         = "27017"
 )
 
 type DBClient struct {
@@ -41,7 +43,16 @@ func (d *DBClient) init() error {
 	if d.user == "" || d.pass == "" {
 		log.Fatal("DB_USER or DB_PASS not found in .env file")
 	}
-	d.uri = "mongodb://" + d.user + ":" + d.pass + "@localhost:27017"
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	if host == "" {
+		host = defaultHost
+	}
+	if port == "" {
+		port = defaultPort
+	}
+
+	d.uri = fmt.Sprintf("mongodb://%s:%s@%s:%s", d.user, d.pass, host, port)
 	return err
 }
 

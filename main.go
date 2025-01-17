@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"granitex/db"
 	"granitex/server"
 
@@ -10,8 +9,6 @@ import (
 )
 
 func main() {
-	fmt.Println("Hello, World!")
-
 	e := echo.New()
 
 	e.Use(middleware.Logger())
