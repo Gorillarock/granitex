@@ -1,8 +1,8 @@
 package main
 
 import (
-	"granitex/db"
-	"granitex/server"
+	"github.com/Gorillarock/granitex/db"
+	"github.com/Gorillarock/granitex/server"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -21,7 +21,7 @@ func main() {
 	e.POST("/v1/handler/tx", server.PostTxHandler)
 	e.GET("/v1/handler/rx", server.GetRxHandler)
 
-	err := db.NewDBClient()
+	err := db.InitializeDBInteractor()
 	if err != nil {
 		e.Logger.Fatal(err)
 	}

@@ -17,3 +17,13 @@ build:
 
 rebuild:
 	docker compose build --no-cache
+
+mocks:
+	mockery
+
+mock-clean:  ## Remove all generated mocks
+	find "./" -type f -name "*_mock.go" -exec rm {} +
+
+mockery-full-rebuild: mock-clean mocks
+	go install github.com/vektra/mockery/v2@2.51.0
+	@mockery --config=.mockery.yaml

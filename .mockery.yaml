@@ -1,0 +1,10 @@
+with-expecter: true
+mockname: "{{.InterfaceName | camelcase }}"
+filename: "{{.InterfaceName | snakecase }}_mock.go"
+packages:
+  github.com/Gorillarock/granitex/db:
+    config:
+      dir: db/mocks
+      recursive: true
+    interfaces:
+      DBInteractor:

@@ -3,11 +3,12 @@ package db
 import (
 	"context"
 	"fmt"
-	"granitex/model"
 	"log"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/Gorillarock/granitex/model"
 
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
@@ -16,7 +17,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var DBHandler DBClient
+var DBHandler DBInteractor
 
 const (
 	DATABASE            = "granitex"
@@ -76,9 +77,14 @@ func (d *DBClient) disconnect(ctx context.Context) error {
 	return d.Client.Disconnect(ctx)
 }
 
-func NewDBClient() error {
-	DBHandler = DBClient{}
-	return DBHandler.init()
+func InitializeDBInteractor() error {
+	client := &DBClient{}
+	err := client.init()
+	if err != nil {
+		return err
+	}
+	DBHandler = client
+	return err
 }
 
 // Inserts a TX Post request into the database

@@ -6,9 +6,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"granitex/db"
-	"granitex/model"
 	"net/http"
+
+	"github.com/Gorillarock/granitex/db"
+	"github.com/Gorillarock/granitex/model"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"

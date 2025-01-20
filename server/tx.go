@@ -5,10 +5,11 @@ package server
 import (
 	"crypto/rand"
 	"fmt"
-	"granitex/db"
-	"granitex/model"
 	"math/big"
 	"net/http"
+
+	"github.com/Gorillarock/granitex/db"
+	"github.com/Gorillarock/granitex/model"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
